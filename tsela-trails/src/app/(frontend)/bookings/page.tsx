@@ -1,13 +1,12 @@
 import React from 'react'
-import './styles.css'
 
-export default async function Home() {
+export default async function Bookings() {
 
   return (
     <div className="home">
       <div className="content">
         <div className="text-sm font-bold underline">
-          Home page
+          Bookings page
         </div>
       </div>
     </div>
