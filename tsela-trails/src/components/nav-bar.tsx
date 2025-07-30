@@ -36,7 +36,7 @@ export function NavBar() {
 
           <NavigationMenuItem>
             <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-              <Link href="/gallery">Gallery</Link>
+              <Link href="/blog">Blog</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
