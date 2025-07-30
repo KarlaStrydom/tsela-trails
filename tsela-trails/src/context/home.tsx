@@ -1,23 +1,23 @@
-// context/SettingsContext.tsx
+// context/HomeContext.tsx
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
 const HomeContext = createContext<any>(null)
 
-export const useSettings = () => useContext(HomeContext)
+export const useHome = () => useContext(HomeContext)
 
-const SettingsProvider = ({ children }: any) => {
-  const [settings, setSettings] = useState<any>(null)
+const HomeProvider = ({ children }: any) => {
+  const [home, setHome] = useState<any>(null)
 
   useEffect(() => {
     fetch('/api/home')
       .then((res) => res.json())
-      .then((data) => setSettings(data))
-      .catch(() => setSettings(null))
+      .then((data) => setHome(data))
+      .catch(() => setHome(null))
   }, [])
 
-  return <HomeContext.Provider value={settings}>{children}</HomeContext.Provider>
+  return <HomeContext.Provider value={home}>{children}</HomeContext.Provider>
 }
 
-export default SettingsProvider
+export default HomeProvider
