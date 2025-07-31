@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useHome } from "@/context/home"
 
 import {
@@ -20,7 +21,7 @@ export function NavBar() {
   return (
     <div className="flex items-center justify-between w-full font-heading font-extrabold text-2xl py-4">
       <div>
-        <Link href="/">Logo</Link>
+        <Link href="/"><Image src="/Emblem Logo/Emblem Brown.svg" alt="Logo" width={100} height={100}/></Link>
       </div>
       <NavigationMenu className="w-full flex items-center justify-between">
         <NavigationMenuList>
@@ -65,7 +66,7 @@ export function NavBar() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-      
+
       <ContactForm buttonText="Contact" />
     </div>
   )
