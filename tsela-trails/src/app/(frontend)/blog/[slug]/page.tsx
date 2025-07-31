@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import { useBlog } from '@/context/blog'
+import Masonry from '@/components/masonry'
 
 function renderContentNode(node: any) {
   switch (node.type) {
@@ -93,6 +94,30 @@ export default function PostPage() {
       <section className="w-full">
         {post.content?.root?.children?.map((node: any, i: number) => renderContentNode(node))}
       </section>
+
+      {post.gallery && post.gallery.length > 0 && (
+        <section className="w-full mt-8">
+          <h2 className="text-3xl font-heading font-bold mb-6">Gallery</h2>
+          <div className="h-[800px]">
+            <Masonry
+              items={post.gallery.map((image: any) => ({
+                id: image.id.toString(),
+                img: image.url,
+                url: image.url,
+                height: (image.height / image.width) * 400, // Normalize height based on aspect ratio
+              }))}
+              ease="power3.out"
+              duration={0.6}
+              stagger={0.05}
+              animateFrom="bottom"
+              scaleOnHover={true}
+              hoverScale={0.95}
+              blurToFocus={true}
+              colorShiftOnHover={true}
+            />
+          </div>
+        </section>
+      )}
     </main>
   )
 }

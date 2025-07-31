@@ -26,6 +26,12 @@ export const BlogPosts: CollectionConfig = {
       editor: lexicalEditor({}), // or 'quill'
       required: true,
     },
+    {
+      name: 'gallery',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
+    }
   ],
   hooks: {
     beforeValidate: [

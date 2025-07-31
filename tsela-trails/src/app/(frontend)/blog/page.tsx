@@ -5,59 +5,60 @@ import { CgProfile } from 'react-icons/cg'
 import { LuCalendarX } from 'react-icons/lu'
 import Link from 'next/link'
 import { useBlog } from '@/context/blog'
+import Masonry from '@/components/masonry';
 
 export default function Blog() {
   const blog = useBlog()
   const posts = blog?.posts.docs ?? null
 
+  const items = Array.isArray(posts) 
+    ? posts
+        .filter((post) => post.visible && new Date(post.publishedDate) <= new Date())
+        .flatMap((post) => {
+          // If post has gallery images, use those
+          if (post.gallery && post.gallery.length > 0) {
+            return post.gallery.map((image :any) => ({
+              id: image.id.toString(),
+              img: image.url,
+              url: `/blog/${post.slug}`,
+              height: (image.height / image.width) * 400, // Normalize height based on aspect ratio
+              title: post.title
+            }));
+          }
+          // If no gallery, use header image if it exists
+          if (post.headerImage?.url) {
+            return [{
+              id: post.headerImage.id.toString(),
+              img: post.headerImage.url,
+              url: `/blog/${post.slug}`,
+              height: (post.headerImage.height / post.headerImage.width) * 400,
+              title: post.title
+            }];
+          }
+          // If no images at all, skip this post
+          return [];
+        })
+    : [];
+
+  if (!Array.isArray(posts) || posts.length === 0) {
+    return <div className="p-8">No posts available.</div>;
+  }
+
   return (
-    <main className="flex-1 flex flex-col gap-5 items-center">
-      {Array.isArray(posts) &&
-        posts
-          .filter((post) => post.visible && new Date(post.publishedDate) <= new Date())
-          .map((post) => (
-            <Link
-              key={post.id}
-              href={`/blog/${post.slug}`}
-              className="w-3/4 hover:bg-foreground/10"
-            >
-              <div className="flex gap-3 pb-3 border-b-1">
-                {post.headerImage?.url && (
-                  <Image
-                    src={post.headerImage.url}
-                    alt={post.headerImage.alt || post.title}
-                    width={1080}
-                    height={920}
-                    className="w-2/5 h-64 object-cover rounded"
-                  />
-                )}
-                <div className="w-3/5 flex flex-col justify-between">
-                  <div>
-                    <h2 className="text-4xl font-bold font-heading">{post.title}</h2>
-                    <p className="text-md">{post.excerpt}</p>
-                  </div>
-                  <div>
-                    <p className="text-md flex items-center gap-2">
-                      <CgProfile /> Karla
-                    </p>
-                    <p className="text-md flex items-center gap-2">
-                      <LuCalendarX />{' '}
-                      {new Date(post.publishedDate)
-                        .toLocaleDateString('en-GB', {
-                          day: '2-digit',
-                          month: 'short',
-                          year: 'numeric',
-                        })
-                        .replace(/ /g, ' ')}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-      {Array.isArray(posts) &&
-        posts.filter((post) => post.visible && new Date(post.publishedDate) <= new Date())
-          .length === 0 && <p>No posts available.</p>}
+    <main className="flex-1 flex flex-col items-center">
+      <div className="w-full h-[800px]">
+        <Masonry
+          items={items}
+          ease="power3.out"
+          duration={0.6}
+          stagger={0.05}
+          animateFrom="bottom"
+          scaleOnHover={true}
+          hoverScale={0.95}
+          blurToFocus={true}
+          colorShiftOnHover={true}
+        />
+      </div>
     </main>
   )
 }
