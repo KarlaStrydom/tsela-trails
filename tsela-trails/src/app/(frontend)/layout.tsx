@@ -19,7 +19,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <body className='px-40'>
+      <body className='!px-40'>
         <HomeProvider initialSettings={home}>
           <NavBar />
           <main>{children}</main>

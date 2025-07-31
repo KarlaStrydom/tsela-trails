@@ -13,6 +13,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+import { ContactForm } from "./contact-form"
 
 export function NavBar() {
   const home = useHome()
@@ -64,9 +65,8 @@ export function NavBar() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-      <div>
-        <Link href="/contact">Contact</Link>
-      </div>
+      
+      <ContactForm buttonText="Contact" />
     </div>
   )
 }
