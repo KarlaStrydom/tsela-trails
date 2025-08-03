@@ -1,59 +1,50 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
-import { getPayload } from 'payload'
+'use client'
+
 import React from 'react'
-import { fileURLToPath } from 'url'
-
-import config from '@/payload.config'
 import './styles.css'
+import { useHome } from '@/context/home'
 
-export default async function HomePage() {
-  const headers = await getHeaders()
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
+export default function Home() {
+  const home = useHome()
+  const { layout } = home || {}
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  if (!layout) return null
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
-        </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
-    </div>
+    <main className="home space-y-12 py-10">
+      {layout.map((block: any) => {
+        switch (block.blockType) {
+          case 'textBlock':
+            return (
+              <section key={block.id} className="textBlock space-y-4">
+                <h2 className="text-6xl font-bold text-primary-foreground">{block.heading}</h2>
+                <p className="text-xl">
+                  {block.content}
+                </p>
+              </section>
+            )
+
+          case 'featureList':
+            return (
+              <section key={block.id} className="featureList space-y-6">
+                <h2 className="text-6xl font-bold text-primary-foreground">{block.heading}</h2>
+                <ul className="grid md:grid-cols-2 gap-6">
+                  {block.features?.map((feature: any) => (
+                    <li key={feature.id} className="bg-card p-4 rounded-lg shadow-sm">
+                      <h3 className="font-semibold text-xl">{feature.title}</h3>
+                      <p className="text-md text-primary-foreground whitespace-pre-line">
+                        {feature.description}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )
+
+          default:
+            return null
+        }
+      })}
+    </main>
   )
 }
