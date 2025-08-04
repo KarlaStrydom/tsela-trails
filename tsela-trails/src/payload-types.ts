@@ -382,6 +382,11 @@ export interface HomePage {
               | {
                   title: string;
                   description?: string | null;
+                  visible?: boolean | null;
+                  /**
+                   * Optional link for this feature
+                   */
+                  url?: string | null;
                   id?: string | null;
                 }[]
               | null;
@@ -436,6 +441,8 @@ export interface HomePageSelect<T extends boolean = true> {
                 | {
                     title?: T;
                     description?: T;
+                    visible?: T;
+                    url?: T;
                     id?: T;
                   };
               id?: T;
