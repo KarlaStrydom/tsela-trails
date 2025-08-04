@@ -15,6 +15,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import { ContactForm } from "./contact-form"
+import slugify from "slugify";
 
 export function NavBar() {
   const home = useHome()
@@ -37,21 +38,20 @@ export function NavBar() {
               <ul className="grid w-[400px] gap-2 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                 {home?.layout?.map((block: any) => {
                   if (block.blockType === 'featureList') {
-                    return block.features?.map((feature: any) => (
-                      <li key={feature.id}>
-                        <NavigationMenuLink asChild>
-                          <Link
-                            href="#"
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none">{feature.title}</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              {feature.description}
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                    ))
+                    return block.features
+                      ?.filter((feature: any) => feature.visible)
+                      .map((feature: any) => (
+                        <li key={feature.id}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              href={feature.url || '/info/' + slugify(feature.title, { lower: true })}
+                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                            >
+                              <div className="text-sm font-medium leading-none">{feature.title}</div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))
                   }
                   return null
                 })}

@@ -32,6 +32,20 @@ export const HomePage: GlobalConfig = {
               fields: [
                 { name: 'title', type: 'text', required: true },
                 { name: 'description', type: 'textarea' },
+                {
+                  name: 'visible',
+                  type: 'checkbox',
+                  defaultValue: false,
+                  label: 'Show this feature',
+                },
+                {
+                  name: 'url',
+                  type: 'text',
+                  label: 'Link URL',
+                  admin: {
+                    description: 'Optional link for this feature',
+                  },
+                },
               ],
             },
           ],

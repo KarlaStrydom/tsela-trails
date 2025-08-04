@@ -3,6 +3,7 @@
 import React from 'react'
 import './styles.css'
 import { useHome } from '@/context/home'
+import slugify from 'slugify'
 
 export default function Home() {
   const home = useHome()
@@ -30,7 +31,8 @@ export default function Home() {
                 <h2 className="text-6xl font-bold text-primary-foreground">{block.heading}</h2>
                 <ul className="grid md:grid-cols-2 gap-6">
                   {block.features?.map((feature: any) => (
-                    <li key={feature.id} className="bg-card p-4 rounded-lg shadow-sm">
+                    <li key={feature.id} className="bg-card p-4 rounded-lg shadow-sm cursor-pointer hover:bg-card/80 transition"
+                        onClick={() => window.location.href = feature.url || '/info/' + slugify(feature.title, { lower: true })}>
                       <h3 className="font-semibold text-xl">{feature.title}</h3>
                       <p className="text-md text-primary-foreground whitespace-pre-line">
                         {feature.description}

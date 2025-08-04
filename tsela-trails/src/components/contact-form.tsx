@@ -53,14 +53,6 @@ export function ContactForm({ buttonText }: ContactFormProps) {
     } finally {
       setLoading(false)
     }
-
-    if (!error) {
-      fetch('/api/add-client', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, number, email }),
-      })
-    }
   }
 
   const handleClose = () => {
